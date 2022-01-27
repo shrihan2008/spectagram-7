@@ -34,7 +34,7 @@ export default class CreatePost extends Component{
         image_5: require('../image_5.jpg'),
       };
       return (
-        <View style={styles.container}>
+        <View style={ this.state.light_theme ? styles.containerLight : styles.container}>
           <SafeAreaView style={styles.droidSafeArea} />
           <View style={styles.appTitle}>
             <View style={styles.appIcon}>
@@ -108,6 +108,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#15193c',
+  },
+  containerLight: {
+    flex: 1,
+    backgroundColor: 'black',
   },
   droidSafeArea: {
     marginTop:
