@@ -20,7 +20,8 @@ export default class PostCard extends Component {
   constructor(props) {
     super(props);
     this.state = {
-   
+      post_id:this.props.post.key,
+      post_data:this.props.post.value,
       light_theme: true
     };
   }
@@ -55,7 +56,7 @@ export default class PostCard extends Component {
           style={styles.container}
           onPress={() =>
             this.props.navigation.navigate("PostScreen", {
-              story: this.props.post
+              post: this.props.post
             })
           }
         >

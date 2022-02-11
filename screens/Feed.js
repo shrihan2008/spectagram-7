@@ -19,10 +19,40 @@ let post = require("../temp_post.json");
 export default class Feed extends Component {
   constructor(props) {
     super(props);
-   
+    this.state = {
+     
+      light_theme:true,
+      posts:[]
+    };
   }
 
-
+  fetchPosts = () => {
+    firebase
+      .database()
+      .ref("/posts/")
+      .on(
+        "value",
+        snapshot => {
+          let stories = [];
+          if (snapshot.val()) {
+            Object.keys(snapshot.val()).forEach(function (key) {
+              stories.push({
+                key: key,
+                value: snapshot.val()[key]
+              });
+            });
+          }
+          this.setState({ posts: post });
+          this.props.setUpdateToFalse();
+        },
+        function (errorObject) {
+           console.log("The read failed: " + errorObject.code);
+        }
+      );
+  };
+  componentDidMount() {
+    this.fetchStories()
+  }
   renderItem = ({ item: post }) => {
     return <PostCard post={post} navigation={this.props.navigation.navigate}/>;
   };

@@ -10,6 +10,8 @@ import {
   ScrollView,
   TextInput,
   Dimensions,
+  Button,
+  Alert
 } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
 import DropDownPicker from 'react-native-dropdown-picker';
@@ -21,6 +23,35 @@ export default class CreatePost extends Component{
       previewImage: 'image_1',
       dropdownHeight: 40,
     };
+  }
+  async addPost() {
+    if (
+      this.state.caption
+    ) {
+      let postData = {
+      previewImage: this.state.previewImage,
+      caption:this.state.caption,
+      author: firebase.auth().currentUser.displayName,
+      created_on: new Date(),
+      author_uid: firebase.auth().currentUser.uid,
+      profile_img:this.state.profile_img,
+        likes: 0,
+      };
+      await firebase
+        .database()
+        .ref('/post/' + Math.random().toString(50).slice(2))
+        .set(postData)
+        .then(function (snapshot) {});
+        this.props.setUpdateToTrue()
+      this.props.navigation.navigate('Feed');
+    } else {
+      Alert.alert(
+        'error',
+        'all fields required enter all fields ',
+        [{ text: 'ok', onPress: () => console.log('Press OK') }],
+        { cancelable: false }
+      );
+    }
   }
   render() {
     if (!this.state.fontsLoaded) {
@@ -94,6 +125,13 @@ export default class CreatePost extends Component{
                  <TextInput style={styles.textInput} onChangeText={caption=>this.setState({
                   caption
               })} placeholder={"Caption"}/>
+              </View>
+              <View>
+                <Button
+                  onPress={() => this.addPost()}
+                  title="Submit"
+                  color="red"
+                />
               </View>
             </ScrollView>
           </View>
